@@ -1,6 +1,8 @@
 tasks:
   - name: Setup MongoDB
+            MongoDB
     init: |
+      docker-compose up -d
       sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
       echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
       sudo apt-get update
