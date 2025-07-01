@@ -1,130 +1,65 @@
 const Student = require('../models/Student');
 
-// @desc    Get all students
-// @route   GET /students
-// @access  Public
-exports.getStudents = async (req, res, next) => {
+// Create
+exports.createStudent = async (req, res) => {
   try {
-    // Bonus: Pagination
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
-
-    // Bonus: Filter by lastName
-    const filter = {};
-    if (req.query.lastName) {
-      filter.lastName = new RegExp(req.query.lastName, 'i');
+    const { firstName, lastName, email, age } = req.body;
+    if (!firstName || !lastName || !email || !age) {
+      return res.status(400).json({ message: 'Missing required fields' });
     }
 
-    const students = await Student.find(filter).skip(skip).limit(limit);
-    res.status(200).json({
-      success: true,
-      count: students.length,
-      data: students,
-    });
+    const existing = await Student.findOne({ email });
+    if (existing) return res.status(409).json({ message: 'Email already exists' });
+
+    const student = await Student.create({ firstName, lastName, email, age });
+    res.status(201).json(student);
   } catch (err) {
-    next(err);
+    res.status(500).json({ message: err.message });
   }
 };
 
-// @desc    Get single student
-// @route   GET /students/:id
-// @access  Public
-exports.getStudent = async (req, res, next) => {
+// Read All (+ Filtering + Pagination)
+exports.getAllStudents = async (req, res) => {
   try {
-    const student = await Student.findById(req.params.id);
-    
-    if (!student) {
-      return res.status(404).json({
-        success: false,
-        error: 'Student not found',
-      });
-    }
-
-    res.status(200).json({
-      success: true,
-      data: student,
-    });
+    const { page = 1, limit = 10, lastName } = req.query;
+    const filter = lastName ? { lastName: new RegExp(lastName, 'i') } : {};
+    const students = await Student.find(filter)
+      .skip((page - 1) * limit)
+      .limit(Number(limit));
+    res.json(students);
   } catch (err) {
-    next(err);
+    res.status(500).json({ message: err.message });
   }
 };
 
-// @desc    Create student
-// @route   POST /students
-// @access  Public
-exports.createStudent = async (req, res, next) => {
-  try {
-    const student = await Student.create(req.body);
-    res.status(201).json({
-      success: true,
-      data: student,
-    });
-  } catch (err) {
-    next(err);
-  }
-};
-
-// @desc    Update student
-// @route   PUT /students/:id
-// @access  Public
-exports.updateStudent = async (req, res, next) => {
-  try {
-    const student = await Student.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
-
-    if (!student) {
-      return res.status(404).json({
-        success: false,
-        error: 'Student not found',
-      });
-    }
-
-    res.status(200).json({
-      success: true,
-      data: student,
-    });
-  } catch (err) {
-    next(err);
-  }
-};
-
-// @desc    Delete student
-// @route   DELETE /students/:id
-// @access  Public
-exports.deleteStudent = async (req, res, next) => {
-  try {
-    const student = await Student.findByIdAndDelete(req.params.id);
-
-    if (!student) {
-      return res.status(404).json({
-        success: false,
-        error: 'Student not found',
-      });
-    }
-
-    res.status(200).json({
-      success: true,
-      data: { id: req.params.id },
-    });
-  } catch (err) {
-    next(err);
-  }
-};
-
-// @desc    Get students count
-// @route   GET /students/count
-// @access  Public
-exports.getStudentsCount = async (req, res, next) => {
+// Count
+exports.getCount = async (req, res) => {
   try {
     const count = await Student.countDocuments();
-    res.status(200).json({
-      success: true,
-      data: { count },
-    });
+    res.json({ count });
   } catch (err) {
-    next(err);
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// Update
+exports.updateStudent = async (req, res) => {
+  try {
+    const student = await Student.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!student) return res.status(404).json({ message: 'Student not found' });
+    res.json(student);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// Delete
+exports.deleteStudent = async (req, res) => {
+  try {
+    const student = await Student.findByIdAndDelete(req.params.id);
+    if (!student) return res.status(404).json({ message: 'Student not found' });
+    res.json({ message: 'Deleted', id: req.params.id });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
