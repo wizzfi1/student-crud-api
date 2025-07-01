@@ -1,3 +1,8 @@
+<p align="center">
+  <img src="./og-image.png" alt="Student CRUD API Banner" width="100%">
+</p>
+
+
 # 🎓 Student CRUD API (Node.js + Express + MongoDB)
 
 A simple RESTful API for managing student records using **MongoDB**, **Express.js**, and **Node.js**. Includes validation, error handling, filtering, and pagination support.
