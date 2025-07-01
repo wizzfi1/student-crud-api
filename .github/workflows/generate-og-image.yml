@@ -28,7 +28,8 @@ jobs:
           const html = fs.readFileSync('og-template.html', 'utf8');
           nodeHtmlToImage({
             output: 'og-image.png',
-            html
+            html,
+            puppeteerArgs: ['--no-sandbox']
           }).then(() => console.log('OG Image created.'));
           "
 
