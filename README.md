@@ -38,6 +38,25 @@ A RESTful API for managing student records with MongoDB.
 - Pagination: `/students?page=1&limit=10`
 - Filtering: `/students?lastName=Smith`
 
-## Postman Collection
+## Postman Testing in Gitpod
 
-Import the Postman collection from `Student-CRUD-API.postman_collection.json` to test the API endpoints.
+1. Start your server in Gitpod:
+   ```bash
+   npm run dev
+   ```
+
+2. Access Postman:
+   - Open the Postman web app: https://web.postman.co/
+   - Import the collection from `postman/Student-CRUD-API.postman_collection.json`
+
+3. Set up environment:
+   - Create environment "Gitpod Student API"
+   - Set `base_url` to your Gitpod URL (looks like `https://3000-yourworkspaceid.ws-usXX.gitpod.io`)
+
+4. Run requests in this order:
+   1. Create Student
+   2. Get All Students
+   3. Get Single Student
+   4. Update Student
+   5. Get Students Count
+   6. Delete Student

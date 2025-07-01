@@ -14,3 +14,8 @@ tasks:
       mongod --bind_ip 127.0.0.1 --dbpath=/data/db --fork --logpath=/var/log/mongodb/mongod.log
   - name: Start Server
     command: npm run dev
+
+ports:
+  - port: 5000
+    onOpen: open-preview
+    visibility: public

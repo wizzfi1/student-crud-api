@@ -10,9 +10,9 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Add this before other routes
+// Single root route
 app.get('/', (req, res) => {
-  res.json( 'Welcome to my Student CRUD API' );
+  res.json({ message: 'Welcome to Student CRUD API' });
 });
 
 // Routes
