@@ -87,10 +87,10 @@ Import the included Student-CRUD.postman_collection.json into Postman:
 POST /students
 
 {
-  "firstName": "John",
-  "lastName": "Doe",
-  "email": "john.doe@example.com",
-  "age": 22
+  "firstName": "Wisdom",
+  "lastName": "Shaibu",
+  "email": "shaibuwisdom@gmail.com",
+  "age": 26
 }
 
 📌 Error Codes
