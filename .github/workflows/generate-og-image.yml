@@ -1,0 +1,39 @@
+name: Generate OG Image
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  generate-og:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: npm install node-html-to-image
+
+      - name: Generate OG Image
+        run: |
+          node -e "
+          const nodeHtmlToImage = require('node-html-to-image');
+          const fs = require('fs');
+          const html = fs.readFileSync('og-template.html', 'utf8');
+          nodeHtmlToImage({
+            output: 'og-image.png',
+            html
+          }).then(() => console.log('OG Image generated!'));
+          "
+
+      - name: Upload image to GitHub
+        uses: actions/upload-artifact@v3
+        with:
+          name: og-image
+          path: og-image.png
