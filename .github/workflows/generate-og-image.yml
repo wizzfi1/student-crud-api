@@ -17,10 +17,10 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install Dependencies
+      - name: Install node-html-to-image
         run: npm install node-html-to-image
 
-      - name: Generate OG Image
+      - name: Generate OG image from template
         run: |
           node -e "
           const nodeHtmlToImage = require('node-html-to-image');
@@ -29,12 +29,11 @@ jobs:
           nodeHtmlToImage({
             output: 'og-image.png',
             html
-          }).then(() => console.log('OG Image generated!'));
+          }).then(() => console.log('OG Image created.'));
           "
 
-      - name: Upload image to GitHub
-  uses: actions/upload-artifact@v4
-  with:
-    name: og-image
-    path: og-image.png
-
+      - name: Upload OG image as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: og-image
+          path: og-image.png
