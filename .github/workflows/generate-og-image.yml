@@ -17,21 +17,11 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install node-html-to-image
-        run: npm install node-html-to-image
+      - name: Install puppeteer
+        run: npm install puppeteer
 
-      - name: Generate OG image from template
-        run: |
-          node -e "
-          const nodeHtmlToImage = require('node-html-to-image');
-          const fs = require('fs');
-          const html = fs.readFileSync('og-template.html', 'utf8');
-          nodeHtmlToImage({
-            output: 'og-image.png',
-            html,
-            puppeteerArgs: ['--no-sandbox']
-          }).then(() => console.log('OG Image created.'));
-          "
+      - name: Generate OG image with Puppeteer
+        run: node scripts/generate-image.js
 
       - name: Upload OG image as artifact
         uses: actions/upload-artifact@v4
