@@ -25,10 +25,11 @@ jobs:
       - name: Generate OG image with Puppeteer
         run: node scripts/generate-image.js
 
-      - name: Commit OG image
+      - name: Commit OG image to main branch
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
+          git pull origin main
           git add og-image.png
-          git commit -m '📸 update og-image [auto]' || echo "No changes to commit"
-          git push
+          git diff --cached --quiet || git commit -m '📸 auto-update og-image'
+          git push origin main
