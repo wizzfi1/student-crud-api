@@ -25,7 +25,7 @@ jobs:
       - name: Generate OG image with Puppeteer
         run: node scripts/generate-image.js
 
-      - name: Commit OG image to main branch
+           - name: Commit OG image to main branch
         env:
           TOKEN: ${{ secrets.PERSONAL_TOKEN }}
         run: |
@@ -36,3 +36,4 @@ jobs:
           git add og-image.png
           git diff --cached --quiet || git commit -m '📸 auto-update og-image'
           git push origin main
+
